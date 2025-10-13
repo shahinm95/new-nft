@@ -2,8 +2,8 @@ import { createNft,fetchDigitalAsset, mplTokenMetadata } from "@metaplex-foundat
 import { airdropIfRequired , getExplorerLink, getKeypairFromFile  } from "@solana-developers/helpers";
 import { createUmi  } from "@metaplex-foundation/umi-bundle-defaults";
 import {Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js";
-import {keypairIdentity} from "@metaplex-foundation/umi"
-
+import {generateSigner, keypairIdentity, percentAmount} from "@metaplex-foundation/umi"
+ 
 
 const connection = new Connection(clusterApiUrl("devnet"));
 const user = await getKeypairFromFile() //if we don't specify anything here it will use id.json which is in our home folder
@@ -21,3 +21,20 @@ const umiUser = umi.eddsa.createKeypairFromSecretKey(user.secretKey);
 umi.use(keypairIdentity(umiUser));
 
 console.log("set up Umi isntance fir user")
+
+
+const collectionMint = generateSigner(umi)
+const transaction = await createNft(umi , {
+    mint : collectionMint ,
+    name : "My collection",
+    symbol : "MC",
+    uri : "https://...",
+    sellerFeeBasisPoints : percentAmount(0),
+    isCollection: true,
+})
+await transaction.sendAndConfirm(umi);
+
+const createdcollectionNft = await fetchDigitalAsset(umi, collectionMint.publicKey );
+
+
+console.log(` created collection ! address is ${getExplorerLink("address", createdcollectionNft.mint.publicKey , "devnet")}`)
