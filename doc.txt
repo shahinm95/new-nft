@@ -1,3 +1,4 @@
 npm init -y
 npm i @metaplex-foundation/mpl-token-metadata @metaplex-foundation/umi-bundle-defaults
 edit create-collection.ts // for making file with that name 
+npm i @solana-developers/heplers
