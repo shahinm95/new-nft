@@ -32,7 +32,7 @@ const transaction = await createNft(umi, {
     mint ,
     name : "My nft",
     symbol : "MN",
-    uri : "https://raw.githubusercontent.com/shahinm95/new-nft/59111a01af10e39b8d9c5bada874214541b13f17/raw/raw.json",
+    uri : "https://raw.githubusercontent.com/shahinm95/new-nft/refs/heads/main/raw/raw2.json",
     sellerFeeBasisPoints : percentAmount(0),
     isCollection: false,
     collection : {
@@ -50,3 +50,5 @@ const createdNft = await fetchDigitalAsset(umi ,
 console.log(` created nft ! address is ${getExplorerLink("address", createdNft.mint.publicKey , "devnet")}`)
 
 //npx esrun create-nft.ts
+
+// created at this address : https://explorer.solana.com/address/6VdJUcNEBmBzaE3rjJfSeaN9X9s3f58P9nKVK6D45o7w?cluster=devnet
