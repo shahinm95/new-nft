@@ -2,3 +2,9 @@ npm init -y
 npm i @metaplex-foundation/mpl-token-metadata @metaplex-foundation/umi-bundle-defaults
 edit create-collection.ts // for making file with that name 
 npm i @solana-developers/heplers
+
+// for running ts file in command line install esrun : 
+npm i esrun
+
+//for running ts file via esrun :
+npx esrun create-collection.ts

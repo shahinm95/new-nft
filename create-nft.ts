@@ -2,7 +2,7 @@ import { createNft,fetchDigitalAsset, mplTokenMetadata } from "@metaplex-foundat
 import { airdropIfRequired , getExplorerLink, getKeypairFromFile  } from "@solana-developers/helpers";
 import { createUmi  } from "@metaplex-foundation/umi-bundle-defaults";
 import {Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js";
-import {generateSigner, keypairIdentity, percentAmount} from "@metaplex-foundation/umi"
+import {generateSigner, keypairIdentity, percentAmount, publicKey} from "@metaplex-foundation/umi"
  
 
 const connection = new Connection(clusterApiUrl("devnet"));
@@ -22,24 +22,31 @@ umi.use(keypairIdentity(umiUser));
 
 console.log("set up Umi isntance for user")
 
+const collectionAddress = publicKey("GXS28bZ2cCCvCEf4ZUYJj9KaC5GApzok1fFHV9x9hpFp"); // this is a function turns publickey to umi version of it
 
-const collectionMint = generateSigner(umi)
-console.log("collection mint is : ", collectionMint)
-const transaction = await createNft(umi , {
-    mint : collectionMint ,
-    name : "My collection",
-    symbol : "MC",
+
+console.log("creating nft...");
+
+const mint = generateSigner(umi);
+const transaction = await createNft(umi, {
+    mint ,
+    name : "My nft",
+    symbol : "MN",
     uri : "https://raw.githubusercontent.com/shahinm95/new-nft/59111a01af10e39b8d9c5bada874214541b13f17/raw/raw.json",
     sellerFeeBasisPoints : percentAmount(0),
-    isCollection: true,
+    isCollection: false,
+    collection : {
+        key : collectionAddress,
+        verified: false,
+    }
 })
-console.log("done transaction")
+
 await transaction.sendAndConfirm(umi);
-console.log("done with send and confirm")
-const createdcollectionNft = await fetchDigitalAsset(umi, collectionMint.publicKey );
 
+const createdNft = await fetchDigitalAsset(umi , 
+    mint.publicKey
+)
 
-console.log(` created collection ! address is ${getExplorerLink("address", createdcollectionNft.mint.publicKey , "devnet")}`)
+console.log(` created nft ! address is ${getExplorerLink("address", createdNft.mint.publicKey , "devnet")}`)
 
-// for deploying code :
-//npx esrun create-collection.ts 
+//npx esrun create-nft.ts
